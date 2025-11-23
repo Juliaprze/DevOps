@@ -1,14 +1,18 @@
 from flask import Flask
+import requests
 
 app = Flask(__name__)
 
-@app.route('/')
+@app.route("/")
 def home():
-    return "Hello, Dockerized Python World!"
+    # Komunikacja z worker przez sieć Docker (nazwa usługi: worker)
+    try:
+        response = requests.get("http://worker:5001/task")
+        worker_result = response.text
+    except Exception as e:
+        worker_result = f"Nie udało się: {e}"
 
-@app.route('/about')
-def about():
-    return "To jest prosty endpoint /about w aplikacji Flask!"
+    return f"Serwer App działa, odp. Worker: {worker_result}"
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000)
