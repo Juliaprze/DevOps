@@ -1,11 +1,14 @@
+import os
 import requests
 import time
 
-def call_worker():
+WORKER_URL = os.getenv("WORKER_URL", "http://worker-service:5001/task")
+
+def call_worker_once():
     print("[APP] Startuję zapytanie do workera...")
     start = time.time()
     try:
-        response = requests.get("http://worker:5001/task", timeout=2)
+        response = requests.get(WORKER_URL, timeout=2)
         elapsed = round(time.time() - start, 3)
         data = response.json()
 
@@ -19,4 +22,6 @@ def call_worker():
         print(f"[APP] Błąd komunikacji z workerem: {e}")
 
 if __name__ == "__main__":
-    call_worker()
+    while True:
+        call_worker_once()
+        time.sleep(5)
