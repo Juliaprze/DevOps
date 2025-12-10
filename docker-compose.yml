@@ -1,23 +1,26 @@
-version: '3.8'
+version: "3.8"
+
 services:
   app:
     build:
       context: .
       dockerfile: Dockerfile
-    command: python app.py  # uruchamia app.py
-    ports:
-      - "5000:5000"
+    command: python app.py
+    depends_on:
+      - worker
     networks:
       - mynet
+
   worker:
     build:
       context: .
       dockerfile: Dockerfile
-    command: python worker.py  # uruchamia worker.py
+    command: python worker.py
     ports:
       - "5001:5001"
     networks:
       - mynet
+
 networks:
   mynet:
     driver: bridge
