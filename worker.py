@@ -8,7 +8,6 @@ app = Flask(__name__)
 @app.route("/task")
 def task():
     start = time.time()
-
     time.sleep(random.uniform(0.3, 1.0))
     value = random.randint(1, 100)
     elapsed = round(time.time() - start, 3)

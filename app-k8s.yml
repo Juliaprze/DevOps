@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app
+  template:
+    metadata:
+      labels:
+        app: app
+    spec:
+      containers:
+        - name: app
+          image: devops-app:latest
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: WORKER_URL
+              value: http://worker-service:5001/task
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-service
+spec:
+  selector:
+    app: app
+  ports:
+    - port: 5000
+      targetPort: 5000
+  type: NodePort

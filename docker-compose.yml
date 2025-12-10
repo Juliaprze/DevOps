@@ -8,6 +8,8 @@ services:
     command: python app.py
     depends_on:
       - worker
+    environment:
+      - WORKER_URL=http://worker:5001/task
     networks:
       - mynet
 
